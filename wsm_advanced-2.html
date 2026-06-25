@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WSM Investments Holdings | Construction · IT · Real Estate · Transportation</title>
+<style>
+:root{
+  --black:#080b0f;
+  --deep:#0d1117;
+  --steel:#141c26;
+  --mid:#1e2a38;
+  --line:#263142;
+  --signal:#d4621a;
+  --signal2:#e8850a;
+  --paper:#f0ede6;
+  --dim:#6b7f96;
+  --white:#f4f2ee;
+  --glow:rgba(212,98,26,0.18);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;font-size:16px;}
+body{background:var(--black);color:var(--white);font-family:'Helvetica Neue',Arial,sans-serif;overflow-x:hidden;}
+a{text-decoration:none;color:inherit;}
+
+/* ===================== PRELOADER ===================== */
+#preloader{
+  position:fixed;inset:0;z-index:9999;
+  background:var(--black);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  transition:opacity 0.8s ease, visibility 0.8s ease;
+}
+#preloader.hidden{opacity:0;visibility:hidden;pointer-events:none;}
+.pre-logo{
+  display:flex;flex-direction:column;align-items:center;gap:22px;
+  opacity:0;transform:scale(0.7);
+  animation:preLogo 0.9s cubic-bezier(0.16,1,0.3,1) 0.2s forwards;
+}
+@keyframes preLogo{to{opacity:1;transform:scale(1);}}
+.pre-mark{
+  width:88px;height:88px;background:var(--signal);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Arial Black',Arial,sans-serif;font-weight:900;font-size:36px;color:var(--black);
+  position:relative;
+}
+.pre-mark::before{
+  content:'';position:absolute;inset:-4px;
+  border:1px solid var(--signal);
+  animation:pulseRing 1.4s ease-out 0.8s infinite;
+}
+@keyframes pulseRing{0%{transform:scale(1);opacity:0.8;}100%{transform:scale(1.5);opacity:0;}}
+.pre-name{font-family:'Arial Black',Arial,sans-serif;font-weight:900;font-size:18px;letter-spacing:0.18em;text-transform:uppercase;color:var(--white);}
+.pre-tagline{font-size:12px;letter-spacing:0.12em;color:var(--dim);text-transform:uppercase;}
+.pre-bar-wrap{position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--mid);}
+.pre-bar{height:100%;background:linear-gradient(90deg,var(--signal),var(--signal2));width:0;animation:barFill 1.8s cubic-bezier(0.4,0,0.2,1) 0.3s forwards;}
+@keyframes barFill{to{width:100%;}}
+
+/* ===================== NAV ===================== */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:500;
+  padding:0 48px;height:76px;
+  display:flex;align-items:center;justify-content:space-between;
+  transition:background 0.4s ease, border-color 0.4s ease;
+  border-bottom:1px solid transparent;
+}
+nav.scrolled{background:rgba(8,11,15,0.92);backdrop-filter:blur(20px);border-color:var(--line);}
+.nav-brand{display:flex;align-items:center;gap:14px;}
+.nav-mark{width:36px;height:36px;background:var(--signal);display:flex;align-items:center;justify-content:center;font-family:'Arial Black',Arial,sans-serif;font-weight:900;font-size:15px;color:var(--black);}
+.nav-wordmark{font-family:'Arial Black',Arial,sans-serif;font-weight:900;font-size:14px;letter-spacing:0.06em;text-transform:uppercase;}
+.nav-wordmark small{display:block;font-size:9px;color:var(--dim);font-weight:400;text-transform:none;letter-spacing:0.04em;}
+.nav-links{display:flex;align-items:center;gap:40px;}
+.nav-links a{font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:rgba(244,242,238,0.65);transition:color 0.2s;}
+.nav-links a:hover{color:var(--white);}
+.nav-cta{background:var(--signal);color:var(--black) !important;padding:11px 24px;font-weight:900;font-size:12px;letter-spacing:0.08em;transition:background 0.2s,transform 0.2s;}
+.nav-cta:hover{background:var(--signal2);transform:translateY(-1px);}
+.burger{display:none;background:none;border:none;cursor:pointer;flex-direction:column;gap:5px;padding:8px;}
+.burger span{width:24px;height:2px;background:var(--white);display:block;transition:transform 0.3s;}
+
+/* ===================== HERO ===================== */
+.hero{
+  position:relative;height:100vh;min-height:700px;
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;
+}
+#heroCanvas{position:absolute;inset:0;width:100%;height:100%;}
+.hero-vignette{
+  position:absolute;inset:0;
+  background:radial-gradient(ellipse at 50% 60%, transparent 20%, rgba(8,11,15,0.7) 70%, rgba(8,11,15,0.97) 100%);
+  pointer-events:none;
+}
+.hero-content{
+  position:relative;z-index:2;
+  text-align:center;
+  padding:0 24px;
+  max-width:900px;
+}
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:12px;
+  font-size:11px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--signal);
+  margin-bottom:30px;
+  opacity:0;transform:translateY(20px);
+  animation:fadeUp 0.8s ease 1.9s forwards;
+}
+.hero-eyebrow .dot{width:5px;height:5px;border-radius:50%;background:var(--signal);animation:blink 1.5s step-end 2.5s infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:0;}}
+.hero-h1{
+  font-family:'Arial Black',Arial,sans-serif;font-weight:900;
+  font-size:clamp(46px,7.5vw,96px);line-height:0.92;letter-spacing:-0.02em;
+  text-transform:uppercase;margin-bottom:28px;
+  opacity:0;transform:translateY(30px);
+  animation:fadeUp 0.9s cubic-bezier(0.16,1,0.3,1) 2.1s forwards;
+}
+.hero-h1 .accent{color:var(--signal);}
+.hero-sub{
+  font-size:17px;line-height:1.7;color:var(--dim);max-width:560px;margin:0 auto 42px;font-weight:300;
+  opacity:0;transform:translateY(20px);
+  animation:fadeUp 0.8s ease 2.3s forwards;
+}
+.hero-actions{
+  display:flex;align-items:center;justify-content:center;gap:18px;flex-wrap:wrap;
+  opacity:0;transform:translateY(20px);
+  animation:fadeUp 0.8s ease 2.5s forwards;
+}
+.btn-fire{
+  background:linear-gradient(135deg,var(--signal),var(--signal2));
+  color:var(--black);padding:18px 38px;font-weight:900;font-size:13px;letter-spacing:0.08em;text-transform:uppercase;
+  display:inline-flex;align-items:center;gap:12px;
+  position:relative;overflow:hidden;transition:transform 0.25s;
+}
+.btn-fire::before{content:'';position:absolute;inset:0;background:rgba(255,255,255,0.15);opacity:0;transition:opacity 0.2s;}
+.btn-fire:hover{transform:translateY(-3px);}
+.btn-fire:hover::before{opacity:1;}
+.btn-ghost{
+  border:1px solid var(--line);color:var(--white);padding:18px 38px;font-weight:700;font-size:13px;letter-spacing:0.08em;text-transform:uppercase;
+  transition:border-color 0.2s,background 0.2s;
+}
+.btn-ghost:hover{border-color:rgba(244,242,238,0.4);background:rgba(255,255,255,0.04);}
+.hero-scroll{
+  position:absolute;bottom:32px;left:50%;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:8px;z-index:2;
+  opacity:0;animation:fadeUp 0.8s ease 3s forwards;
+}
+.hero-scroll span{font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--dim);}
+.scroll-line{width:1px;height:50px;background:linear-gradient(to bottom,var(--signal),transparent);animation:scrollPulse 2s ease-in-out infinite;}
+@keyframes scrollPulse{0%,100%{transform:scaleY(1);opacity:0.6;}50%{transform:scaleY(1.2);opacity:1;}}
+@keyframes fadeUp{to{opacity:1;transform:translateY(0);}}
+
+/* ===================== MARQUEE ===================== */
+.marquee{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--deep);overflow:hidden;padding:16px 0;}
+.marquee-track{display:inline-flex;animation:marqueeScroll 30s linear infinite;white-space:nowrap;}
+.marquee:hover .marquee-track{animation-play-state:paused;}
+.mtag{padding:0 36px;font-size:12px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--dim);border-right:1px solid var(--line);}
+.mtag b{color:var(--signal);}
+@keyframes marqueeScroll{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+
+/* ===================== SECTIONS ===================== */
+.sect{padding:120px 0;}
+.wrap{max-width:1200px;margin:0 auto;padding:0 48px;}
+
+.reveal{opacity:0;transform:translateY(40px);transition:opacity 0.8s ease,transform 0.8s ease;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+.reveal-left{opacity:0;transform:translateX(-40px);transition:opacity 0.8s ease,transform 0.8s ease;}
+.reveal-left.visible{opacity:1;transform:translateX(0);}
+.reveal-right{opacity:0;transform:translateX(40px);transition:opacity 0.8s ease,transform 0.8s ease;}
+.reveal-right.visible{opacity:1;transform:translateX(0);}
+
+.sect-eyebrow{font-size:11px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--signal);margin-bottom:18px;display:flex;align-items:center;gap:10px;}
+.sect-eyebrow::before{content:'';display:block;width:24px;height:2px;background:var(--signal);}
+.sect-h2{font-family:'Arial Black',Arial,sans-serif;font-weight:900;font-size:clamp(30px,4.2vw,52px);text-transform:uppercase;line-height:0.95;letter-spacing:-0.01em;margin-bottom:22px;}
+.sect-p{font-size:16px;line-height:1.75;color:var(--dim);max-width:520px;}
+
+/* ===================== SERVICES ===================== */
+.services-bg{background:var(--deep);}
+.services-head{display:flex;justify-content:space-between;align-items:flex-end;gap:30px;margin-bottom:72px;flex-wrap:wrap;}
+.services-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);}
+.svc{
+  background:var(--deep);padding:44px 32px;
+  position:relative;overflow:hidden;
+  transition:background 0.35s ease;cursor:default;
+}
+.svc::before{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,var(--signal),var(--signal2));
+  transform:scaleX(0);transform-origin:left;transition:transform 0.4s ease;
+}
+.svc:hover::before{transform:scaleX(1);}
+.svc:hover{background:var(--mid);}
+.svc-n{font-family:'Arial Black',Arial,sans-serif;font-size:52px;font-weight:900;color:var(--line);margin-bottom:30px;line-height:1;transition:color 0.35s ease;}
+.svc:hover .svc-n{color:var(--signal);}
+.svc-title{font-family:'Arial Black',Arial,sans-serif;font-weight:900;font-size:17px;text-transform:uppercase;margin-bottom:14px;letter-spacing:0.02em;}
+.svc-desc{font-size:13.5px;line-height:1.65;color:var(--dim);}
+
+/* ===================== AI VIDEO SECTION ===================== */
+.video-sect{background:var(--black);position:relative;overflow:hidden;}
+.video-sect::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--signal),transparent);
+}
+.video-inner{display:grid;grid-template-columns:0.95fr 1.05fr;gap:80px;align-items:center;}
+.video-copy .sect-h2{color:var(--white);}
+.video-copy .sect-p{margin-bottom:30px;}
+.video-steps{margin-top:32px;display:flex;flex-direction:column;gap:0;}
+.vstep{
+  display:flex;gap:20px;padding:18px 0;border-bottom:1px solid var(--line);
+  opacity:0.4;transition:opacity 0.4s ease;
+}
+.vstep.active-step{opacity:1;}
+.vstep-num{
+  width:34px;height:34px;flex-shrink:0;
+  background:var(--mid);border:1px solid var(--line);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Arial Black',Arial,sans-serif;font-size:12px;font-weight:900;color:var(--dim);
+  transition:background 0.4s,color 0.4s,border-color 0.4s;
+}
+.vstep.active-step .vstep-num{background:var(--signal);border-color:var(--signal);color:var(--black);}
+.vstep-body h4{font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:5px;}
+.vstep-body p{font-size:13px;color:var(--dim);line-height:1.5;}
+
+/* The phone / screen mockup */
+.video-mockup{position:relative;}
+.mockup-device{
+  background:var(--deep);border:1px solid var(--line);
+  border-radius:8px;overflow:hidden;
+  box-shadow:0 40px 120px rgba(0,0,0,0.7), 0 0 0 1px rgba(212,98,26,0.1);
+  position:relative;
+}
+.device-topbar{
+  background:var(--steel);padding:14px 20px;
+  display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--line);
+}
+.dot-cluster{display:flex;gap:6px;}
+.dot-cluster span{width:10px;height:10px;border-radius:50%;}
+.dot-cluster span:nth-child(1){background:#ff5f56;}
+.dot-cluster span:nth-child(2){background:#ffbd2e;}
+.dot-cluster span:nth-child(3){background:#27c93f;}
+.device-url{
+  flex:1;background:var(--mid);border-radius:3px;
+  padding:5px 12px;font-size:11px;color:var(--dim);display:flex;align-items:center;gap:8px;
+}
+.device-url .lock{color:#27c93f;font-size:9px;}
+.device-body{padding:0;min-height:420px;position:relative;overflow:hidden;}
+/* Screen content animations */
+.screen-frame{position:absolute;inset:0;padding:24px;display:flex;flex-direction:column;gap:12px;transition:opacity 0.5s,transform 0.5s;}
+.screen-frame.hidden-frame{opacity:0;pointer-events:none;transform:translateX(30px);}
+/* Frame 1: WSM website */
+.f1-hero{background:linear-gradient(135deg,var(--steel),var(--mid));padding:20px;border-radius:4px;margin-bottom:8px;}
+.f1-hero-title{font-family:'Arial Black',Arial,sans-serif;font-size:18px;font-weight:900;text-transform:uppercase;line-height:1.1;margin-bottom:8px;}
+.f1-hero-sub{font-size:11px;color:var(--dim);line-height:1.5;}
+.f1-cards{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.f1-card{background:var(--steel);padding:12px;border-radius:3px;border:1px solid var(--line);}
+.f1-card-title{font-size:10px;font-weight:700;text-transform:uppercase;margin-bottom:6px;color:var(--signal);}
+.f1-card-desc{font-size:9px;color:var(--dim);}
+/* Frame 2: Service selection */
+.f2-title{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:14px;color:var(--signal);}
+.f2-options{display:flex;flex-direction:column;gap:8px;}
+.f2-opt{
+  background:var(--steel);border:1px solid var(--line);padding:12px 16px;border-radius:3px;
+  display:flex;align-items:center;gap:10px;font-size:12px;cursor:pointer;
+  transition:border-color 0.2s,background 0.2s;
+}
+.f2-opt.selected{border-color:var(--signal);background:rgba(212,98,26,0.1);}
+.f2-opt .check{width:18px;height:18px;border:1px solid var(--dim);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;}
+.f2-opt.selected .check{background:var(--signal);border-color:var(--signal);color:var(--black);}
+/* Frame 3: Form fill */
+.f3-title{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:14px;color:var(--signal);}
+.f3-field{margin-bottom:12px;}
+.f3-label{font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px;}
+.f3-input{
+  background:var(--steel);border:none;border-bottom:1px solid var(--line);
+  color:var(--white);font-size:12px;padding:8px 0;width:100%;font-family:inherit;
+  white-space:nowrap;overflow:hidden;
+}
+.f3-input.typing::after{content:'|';animation:cursor 0.7s step-end infinite;color:var(--signal);}
+@keyframes cursor{50%{opacity:0;}}
+.f3-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+/* Frame 4: Confirmation */
+.f4-center{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:16px;text-align:center;padding:20px;}
+.f4-check{
+  width:60px;height:60px;border-radius:50%;
+  background:rgba(212,98,26,0.15);border:2px solid var(--signal);
+  display:flex;align-items:center;justify-content:center;
+  font-size:24px;color:var(--signal);
+}
+.f4-title{font-family:'Arial Black',Arial,sans-serif;font-size:15px;font-weight:900;text-transform:uppercase;margin-bottom:6px;}
+.f4-sub{font-size:12px;color:var(--dim);line-height:1.5;}
+.f4-ref{background:var(--mid);padding:10px 20px;border-radius:3px;font-family:monospace;font-size:11px;color:var(--signal);letter-spacing:0.1em;}
+
+/* Animated cursor */
+.fake-cursor{
+  width:16px;height:16px;
+  background:rgba(212,98,26,0.9);
+  border-radius:50% 50% 0 50%;
+  position:absolute;pointer-events:none;z-index:10;
+  transition:left 0.7s cubic-bezier(0.4,0,0.2,1),top 0.7s cubic-bezier(0.4,0,0.2,1);
+  box-shadow:0 0 10px rgba(212,98,26,0.5);
+}
+
+.progress-bar{height:3px;background:var(--mid);margin-top:0;}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--signal),var(--signal2));transition:width 1.5s linear;}
+.step-indicator{display:flex;justify-content:center;gap:8px;padding:14px;background:var(--steel);border-top:1px solid var(--line);}
+.step-dot{width:8px;height:8px;border-radius:50%;background:var(--mid);transition:background 0.4s,transform 0.4s;}
+.step-dot.active{background:var(--signal);transform:scale(1.3);}
+.step-dot.done{background:var(--dim);}
+
+/* Glow overlay */
+.mockup-glow{
+  position:absolute;top:-80px;right:-80px;
+  width:300px;height:300px;
+  background:radial-gradient(circle,rgba(212,98,26,0.15) 0%,transparent 70%);
+  pointer-events:none;
+}
+
+/* ===================== ABOUT ===================== */
+.about-sect{background:var(--deep);}
+.about-inner{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start;}
+.about-left .sect-h2 span{color:var(--signal);}
+.about-left .sect-p{margin-bottom:18px;}
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);margin-top:48px;border:1px solid var(--line);}
+.stat-item{background:var(--deep);padding:28px 24px;}
+.stat-item .big{font-family:'Arial Black',Arial,sans-serif;font-size:36px;font-weight:900;color:var(--white);line-height:1;}
+.stat-item .big span{color:var(--signal);}
+.stat-item .lbl{font-size:12px;color:var(--dim);margin-top:6px;line-height:1.4;}
+.about-right-box{background:var(--steel);border:1px solid var(--line);overflow:hidden;}
+.box-header{background:var(--signal);padding:18px 26px;display:flex;align-items:center;gap:12px;}
+.box-header .bh-mark{font-family:'Arial Black',Arial,sans-serif;font-size:20px;font-weight:900;color:var(--black);}
+.box-header .bh-text b{display:block;font-size:14px;font-weight:900;color:var(--black);text-transform:uppercase;letter-spacing:0.06em;}
+.box-header .bh-text span{font-size:11px;color:rgba(0,0,0,0.55);}
+.box-rows{padding:8px 0;}
+.box-row{display:flex;justify-content:space-between;padding:15px 26px;border-bottom:1px solid var(--line);}
+.box-row:last-child{border-bottom:none;}
+.box-row .br-label{font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:0.07em;font-weight:700;}
+.box-row .br-val{font-size:14px;color:var(--white);font-weight:600;text-align:right;max-width:200px;}
+.about-quote{
+  margin-top:28px;padding:26px;background:rgba(212,98,26,0.06);
+  border-left:3px solid var(--signal);
+}
+.about-quote p{font-size:15px;line-height:1.7;color:var(--white);font-style:italic;}
+.about-quote cite{display:block;margin-top:12px;font-size:12px;color:var(--signal);font-style:normal;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;}
+
+/* ===================== PROCESS ===================== */
+.process-sect{background:var(--black);}
+.process-head{text-align:center;max-width:600px;margin:0 auto 80px;}
+.process-head .sect-eyebrow{justify-content:center;}
+.process-head .sect-eyebrow::before{display:none;}
+.process-timeline{display:grid;grid-template-columns:repeat(4,1fr);gap:0;position:relative;}
+.process-timeline::before{
+  content:'';position:absolute;top:36px;left:calc(12.5%);right:calc(12.5%);height:1px;
+  background:linear-gradient(90deg,var(--signal),var(--line),var(--signal));
+}
+.proc{padding:0 24px;text-align:center;}
+.proc-num{
+  width:72px;height:72px;border:1px solid var(--line);background:var(--deep);
+  display:flex;align-items:center;justify-content:center;margin:0 auto 24px;
+  font-family:'Arial Black',Arial,sans-serif;font-size:20px;font-weight:900;color:var(--dim);
+  position:relative;z-index:2;transition:all 0.4s ease;
+}
+.proc:hover .proc-num{background:var(--signal);border-color:var(--signal);color:var(--black);}
+.proc-title{font-family:'Arial Black',Arial,sans-serif;font-size:14px;font-weight:900;text-transform:uppercase;margin-bottom:12px;letter-spacing:0.04em;}
+.proc-desc{font-size:13px;color:var(--dim);line-height:1.6;}
+
+/* ===================== CONTACT ===================== */
+.contact-sect{background:var(--deep);position:relative;overflow:hidden;}
+.contact-sect::before{
+  content:'WSM';
+  position:absolute;right:-60px;top:50%;transform:translateY(-50%);
+  font-family:'Arial Black',Arial,sans-serif;font-size:320px;font-weight:900;
+  color:rgba(255,255,255,0.015);line-height:1;pointer-events:none;text-transform:uppercase;
+}
+.contact-inner{display:grid;grid-template-columns:1fr 1fr;gap:80px;position:relative;z-index:1;}
+.contact-right{background:var(--steel);border:1px solid var(--line);padding:44px;}
+.contact-right label{display:block;font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:var(--dim);margin-bottom:8px;font-weight:700;}
+.contact-right input,.contact-right select,.contact-right textarea{
+  width:100%;background:transparent;border:none;border-bottom:1px solid var(--line);
+  color:var(--white);font-size:15px;padding:10px 0;font-family:inherit;transition:border-color 0.2s;
+}
+.contact-right select option{background:var(--steel-deep);}
+.contact-right input:focus,.contact-right select:focus,.contact-right textarea:focus{outline:none;border-bottom-color:var(--signal);}
+.contact-right textarea{resize:vertical;min-height:80px;}
+.form-r{margin-bottom:24px;}
+.form-2col{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+.form-submit{
+  margin-top:8px;width:100%;background:linear-gradient(135deg,var(--signal),var(--signal2));
+  color:var(--black);border:none;padding:18px;font-weight:900;font-size:13px;
+  letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;transition:opacity 0.2s,transform 0.2s;
+  font-family:'Helvetica Neue',Arial,sans-serif;
+}
+.form-submit:hover{opacity:0.9;transform:translateY(-2px);}
+.contact-info-item{display:flex;gap:20px;align-items:flex-start;margin-bottom:32px;}
+.ci-icon{
+  width:48px;height:48px;flex-shrink:0;
+  background:var(--steel);border:1px solid var(--line);
+  display:flex;align-items:center;justify-content:center;font-size:18px;
+}
+.ci-label{font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:var(--dim);margin-bottom:4px;}
+.ci-val{font-size:17px;font-weight:700;color:var(--white);}
+.ci-sub{font-size:12px;color:var(--dim);margin-top:2px;}
+.contact-cta-p{font-size:15px;line-height:1.7;color:var(--dim);margin-bottom:44px;max-width:400px;}
+
+/* ===================== FOOTER ===================== */
+footer{background:var(--black);border-top:1px solid var(--line);padding:32px 0;}
+.foot-inner{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;}
+.foot-brand{display:flex;align-items:center;gap:12px;}
+.foot-mark{width:30px;height:30px;background:var(--signal);display:flex;align-items:center;justify-content:center;font-family:'Arial Black',Arial,sans-serif;font-weight:900;font-size:12px;color:var(--black);}
+.foot-name{font-size:12px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--dim);}
+.foot-copy{font-size:12px;color:var(--dim);}
+.foot-bbee{font-size:11px;color:var(--signal);font-weight:700;letter-spacing:0.06em;}
+
+/* ===================== MOBILE ===================== */
+@media(max-width:1020px){
+  .services-grid{grid-template-columns:1fr 1fr;}
+  .video-inner{grid-template-columns:1fr;}
+  .video-copy{order:2;}
+  .video-mockup{order:1;}
+  .about-inner{grid-template-columns:1fr;}
+  .process-timeline{grid-template-columns:1fr 1fr;gap:40px;}
+  .process-timeline::before{display:none;}
+  .contact-inner{grid-template-columns:1fr;}
+}
+@media(max-width:720px){
+  nav{padding:0 20px;}
+  .wrap{padding:0 20px;}
+  .sect{padding:80px 0;}
+  .services-grid{grid-template-columns:1fr;}
+  .process-timeline{grid-template-columns:1fr;}
+  .nav-links{
+    position:fixed;top:76px;left:0;right:0;background:rgba(8,11,15,0.97);
+    backdrop-filter:blur(20px);flex-direction:column;gap:0;
+    max-height:0;overflow:hidden;transition:max-height 0.35s ease;
+    border-bottom:1px solid var(--line);
+  }
+  .nav-links.open{max-height:320px;}
+  .nav-links a{padding:18px 28px;border-bottom:1px solid var(--line);width:100%;}
+  .nav-cta{width:calc(100% - 56px);margin:12px 28px;text-align:center;}
+  .burger{display:flex;}
+  .form-2col{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- PRELOADER -->
+<div id="preloader">
+  <div class="pre-logo">
+    <div class="pre-mark">W</div>
+    <div class="pre-name">WSM Investments Holdings</div>
+    <div class="pre-tagline">Construction · IT · Real Estate · Transportation</div>
+  </div>
+  <div class="pre-bar-wrap"><div class="pre-bar"></div></div>
+</div>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="nav-brand">
+    <div class="nav-mark">W</div>
+    <div class="nav-wordmark">WSM Investments<small>Holdings (Pty) Ltd</small></div>
+  </div>
+  <div class="nav-links" id="navLinks">
+    <a href="#services">Services</a>
+    <a href="#how-it-works">How It Works</a>
+    <a href="#about">About</a>
+    <a href="#contact" class="nav-cta">Get a Quote</a>
+  </div>
+  <button class="burger" id="burgerBtn"><span></span><span></span><span></span></button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <canvas id="heroCanvas"></canvas>
+  <div class="hero-vignette"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow"><span class="dot"></span>Northwold, Randburg · South Africa · B‑BBEE Level 1</div>
+    <h1 class="hero-h1">We Build.<br>We Connect.<br>We <span class="accent">Deliver.</span></h1>
+    <p class="hero-sub">WSM Investments Holdings brings construction, IT, real estate and transportation under one roof — one call gets your project moving.</p>
+    <div class="hero-actions">
+      <a href="#how-it-works" class="btn-fire">See How It Works <svg width="16" height="16" fill="none" viewBox="0 0 16 16"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></a>
+      <a href="#contact" class="btn-ghost">Request a Quote</a>
+    </div>
+  </div>
+  <div class="hero-scroll"><span>Scroll</span><div class="scroll-line"></div></div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee">
+  <div class="marquee-track">
+    <span class="mtag"><b>▸</b> Construction</span>
+    <span class="mtag"><b>▸</b> IT Solutions</span>
+    <span class="mtag"><b>▸</b> Real Estate</span>
+    <span class="mtag"><b>▸</b> Transportation &amp; Sourcing</span>
+    <span class="mtag"><b>▸</b> B‑BBEE Level 1</span>
+    <span class="mtag"><b>▸</b> Northwold, Randburg</span>
+    <span class="mtag"><b>▸</b> Construction</span>
+    <span class="mtag"><b>▸</b> IT Solutions</span>
+    <span class="mtag"><b>▸</b> Real Estate</span>
+    <span class="mtag"><b>▸</b> Transportation &amp; Sourcing</span>
+    <span class="mtag"><b>▸</b> B‑BBEE Level 1</span>
+    <span class="mtag"><b>▸</b> Northwold, Randburg</span>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section class="sect services-bg" id="services">
+  <div class="wrap">
+    <div class="services-head reveal">
+      <div>
+        <div class="sect-eyebrow">What We Offer</div>
+        <h2 class="sect-h2">Four divisions.<br>One company.</h2>
+      </div>
+      <p class="sect-p">Every service is delivered directly by WSM Investments Holdings — no subcontracting confusion, no split accountability.</p>
+    </div>
+  </div>
+  <div class="services-grid">
+    <div class="svc reveal" style="transition-delay:0s">
+      <div class="svc-n">01</div>
+      <div class="svc-title">Construction</div>
+      <div class="svc-desc">Full-scope building and civil work managed from groundbreaking to handover. We handle site coordination, materials and quality control on every project we take on.</div>
+    </div>
+    <div class="svc reveal" style="transition-delay:0.1s">
+      <div class="svc-n">02</div>
+      <div class="svc-title">IT Solutions</div>
+      <div class="svc-desc">Practical technology infrastructure, networking, support and systems integration for businesses that need reliable setups without the technical runaround.</div>
+    </div>
+    <div class="svc reveal" style="transition-delay:0.2s">
+      <div class="svc-n">03</div>
+      <div class="svc-title">Real Estate</div>
+      <div class="svc-desc">Property sourcing, investment guidance and development support. Whether you are buying, letting or developing, WSM brings market knowledge and direct access.</div>
+    </div>
+    <div class="svc reveal" style="transition-delay:0.3s">
+      <div class="svc-n">04</div>
+      <div class="svc-title">Transportation<br>&amp; Sourcing</div>
+      <div class="svc-desc">Goods transport, logistics coordination and supplier sourcing — keeping your stock, materials and deliveries moving on schedule across South Africa.</div>
+    </div>
+  </div>
+</section>
+
+<!-- AI VIDEO SECTION -->
+<section class="sect video-sect" id="how-it-works">
+  <div class="wrap">
+    <div class="video-inner">
+      <div class="video-copy reveal-left">
+        <div class="sect-eyebrow">Applying For Services</div>
+        <h2 class="sect-h2">Done in under<br><span style="color:var(--signal)">3 minutes.</span></h2>
+        <p class="sect-p">Applying for any WSM service is straightforward. Pick your division, share a few details, and we come back to you directly — no forms lost in a system, no call centres.</p>
+        <div class="video-steps" id="videoSteps">
+          <div class="vstep active-step" data-step="0">
+            <div class="vstep-num">1</div>
+            <div class="vstep-body"><h4>Visit wsm.co.za</h4><p>Land on the WSM Investments Holdings website and browse the four service divisions.</p></div>
+          </div>
+          <div class="vstep" data-step="1">
+            <div class="vstep-num">2</div>
+            <div class="vstep-body"><h4>Choose Your Service</h4><p>Select the division that matches your need — construction, IT, real estate or transport.</p></div>
+          </div>
+          <div class="vstep" data-step="2">
+            <div class="vstep-num">3</div>
+            <div class="vstep-body"><h4>Fill In Your Details</h4><p>Enter your name, number and a short description of the project. Takes about 60 seconds.</p></div>
+          </div>
+          <div class="vstep" data-step="3">
+            <div class="vstep-num">4</div>
+            <div class="vstep-body"><h4>We Confirm &amp; Call Back</h4><p>You receive instant confirmation. Wakhile's team contacts you within 24 hours with next steps.</p></div>
+          </div>
+        </div>
+      </div>
+      <div class="video-mockup reveal-right">
+        <div class="mockup-glow"></div>
+        <div class="mockup-device">
+          <div class="device-topbar">
+            <div class="dot-cluster"><span></span><span></span><span></span></div>
+            <div class="device-url"><span class="lock">🔒</span> wsm-holdings.co.za</div>
+          </div>
+          <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+          <div class="device-body" id="deviceBody">
+
+            <!-- Frame 1: Website landing -->
+            <div class="screen-frame" id="frame0">
+              <div class="f1-hero">
+                <div class="f1-hero-title">WSM Investments<br>Holdings</div>
+                <div class="f1-hero-sub">Construction · IT · Real Estate · Transport</div>
+              </div>
+              <div class="f1-cards">
+                <div class="f1-card"><div class="f1-card-title">Construction</div><div class="f1-card-desc">Building, civil &amp; contracting</div></div>
+                <div class="f1-card"><div class="f1-card-title">IT Solutions</div><div class="f1-card-desc">Networks &amp; infrastructure</div></div>
+                <div class="f1-card"><div class="f1-card-title">Real Estate</div><div class="f1-card-desc">Property sourcing &amp; dev</div></div>
+                <div class="f1-card"><div class="f1-card-title">Transport</div><div class="f1-card-desc">Logistics &amp; sourcing</div></div>
+              </div>
+            </div>
+
+            <!-- Frame 2: Choose service -->
+            <div class="screen-frame hidden-frame" id="frame1">
+              <div class="f2-title">Select Your Service</div>
+              <div class="f2-options">
+                <div class="f2-opt" id="opt0"><div class="check">✓</div>Construction</div>
+                <div class="f2-opt" id="opt1"><div class="check"></div>IT Solutions</div>
+                <div class="f2-opt" id="opt2"><div class="check"></div>Real Estate</div>
+                <div class="f2-opt" id="opt3"><div class="check"></div>Transport &amp; Sourcing</div>
+              </div>
+            </div>
+
+            <!-- Frame 3: Fill details -->
+            <div class="screen-frame hidden-frame" id="frame2">
+              <div class="f3-title">Your Details</div>
+              <div class="f3-grid">
+                <div class="f3-field"><div class="f3-label">Full Name</div><div class="f3-input" id="typeName">&nbsp;</div></div>
+                <div class="f3-field"><div class="f3-label">Phone</div><div class="f3-input" id="typePhone">&nbsp;</div></div>
+              </div>
+              <div class="f3-field"><div class="f3-label">Service</div><div class="f3-input" id="typeSvc" style="color:var(--signal);">Construction</div></div>
+              <div class="f3-field"><div class="f3-label">Project Details</div><div class="f3-input typing" id="typeDesc">&nbsp;</div></div>
+            </div>
+
+            <!-- Frame 4: Confirmed -->
+            <div class="screen-frame hidden-frame" id="frame3">
+              <div class="f4-center">
+                <div class="f4-check">✓</div>
+                <div>
+                  <div class="f4-title">Request Received!</div>
+                  <div class="f4-sub">Wakhile's team will contact you within 24 hours to discuss your project.</div>
+                </div>
+                <div class="f4-ref">REF: WSM-2026-0847</div>
+              </div>
+            </div>
+
+            <!-- Animated cursor -->
+            <div class="fake-cursor" id="fakeCursor" style="left:50%;top:50%;"></div>
+          </div>
+          <div class="step-indicator">
+            <div class="step-dot active" id="sdot0"></div>
+            <div class="step-dot" id="sdot1"></div>
+            <div class="step-dot" id="sdot2"></div>
+            <div class="step-dot" id="sdot3"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="sect about-sect" id="about">
+  <div class="wrap about-inner">
+    <div class="about-left reveal-left">
+      <div class="sect-eyebrow">Who We Are</div>
+      <h2 class="sect-h2">Built on <span>ground level.</span></h2>
+      <p class="sect-p">WSM Investments Holdings (Pty) Ltd is a South African multi-sector company based in Northwold, Randburg. We operate across construction, IT, real estate and transportation and sourcing — all under one director, one team, one standard.</p>
+      <p class="sect-p" style="margin-top:16px;">Our B‑BBEE Level 1 status reflects a genuine commitment to building South Africa's economy alongside our clients, not just for ourselves.</p>
+      <div class="stat-grid">
+        <div class="stat-item"><div class="big">4<span>×</span></div><div class="lbl">Service divisions in one company</div></div>
+        <div class="stat-item"><div class="big"><span>L</span>1</div><div class="lbl">B‑BBEE Level 1 contributor</div></div>
+        <div class="stat-item"><div class="big">1</div><div class="lbl">Director, directly involved in every project</div></div>
+        <div class="stat-item"><div class="big">ZA</div><div class="lbl">Proudly South African, nationally active</div></div>
+      </div>
+    </div>
+    <div class="reveal-right">
+      <div class="about-right-box">
+        <div class="box-header">
+          <div class="bh-mark">W</div>
+          <div class="bh-text"><b>WSM Investments Holdings</b><span>Company Profile</span></div>
+        </div>
+        <div class="box-rows">
+          <div class="box-row"><span class="br-label">Full Name</span><span class="br-val">WSM Investments Holdings (Pty) Ltd</span></div>
+          <div class="box-row"><span class="br-label">Director</span><span class="br-val">Wakhile Madonsela</span></div>
+          <div class="box-row"><span class="br-label">Location</span><span class="br-val">Northwold, Randburg, South Africa</span></div>
+          <div class="box-row"><span class="br-label">B‑BBEE Status</span><span class="br-val" style="color:var(--signal)">Level 1 Contributor</span></div>
+          <div class="box-row"><span class="br-label">Divisions</span><span class="br-val">Construction · IT · Real Estate · Transportation</span></div>
+          <div class="box-row"><span class="br-label">Contact</span><span class="br-val">072 335 5470</span></div>
+        </div>
+      </div>
+      <div class="about-quote">
+        <p>"We started WSM to give clients a single reliable partner across every stage of a project — from the ground up, through the systems, to the final delivery."</p>
+        <cite>— Wakhile Madonsela, Director</cite>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="sect process-sect" id="process">
+  <div class="wrap">
+    <div class="process-head reveal">
+      <div class="sect-eyebrow">Our Process</div>
+      <h2 class="sect-h2">Straightforward from first call.</h2>
+      <p class="sect-p" style="margin:0 auto;text-align:center;">Every division follows the same clear four-step process so you always know what happens next.</p>
+    </div>
+    <div class="process-timeline">
+      <div class="proc reveal" style="transition-delay:0s">
+        <div class="proc-num">01</div>
+        <div class="proc-title">Tell Us What You Need</div>
+        <div class="proc-desc">Call 072 335 5470 or fill in the quote form with your project requirements across any of our four divisions.</div>
+      </div>
+      <div class="proc reveal" style="transition-delay:0.15s">
+        <div class="proc-num">02</div>
+        <div class="proc-title">We Scope &amp; Quote</div>
+        <div class="proc-desc">WSM reviews your request and returns a clear, honest quote with a realistic timeline — no jargon, no inflated numbers.</div>
+      </div>
+      <div class="proc reveal" style="transition-delay:0.3s">
+        <div class="proc-num">03</div>
+        <div class="proc-title">We Get to Work</div>
+        <div class="proc-desc">Once you approve, our team handles the project directly with regular updates at every stage until completion.</div>
+      </div>
+      <div class="proc reveal" style="transition-delay:0.45s">
+        <div class="proc-num">04</div>
+        <div class="proc-title">Sign Off &amp; Support</div>
+        <div class="proc-desc">We close the project with your sign-off and remain available for any follow-up work across all four divisions.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="sect contact-sect" id="contact">
+  <div class="wrap contact-inner">
+    <div class="reveal-left">
+      <div class="sect-eyebrow">Get In Touch</div>
+      <h2 class="sect-h2">Let's start<br>your project.</h2>
+      <p class="contact-cta-p">Call directly or send a few details and Wakhile's team will come back with a quote and timeline within 24 hours.</p>
+      <div class="contact-info-item">
+        <div class="ci-icon">📞</div>
+        <div><div class="ci-label">Phone</div><div class="ci-val">072 335 5470</div><div class="ci-sub">Wakhile Madonsela, Director</div></div>
+      </div>
+      <div class="contact-info-item">
+        <div class="ci-icon">📍</div>
+        <div><div class="ci-label">Location</div><div class="ci-val">Northwold, Randburg</div><div class="ci-sub">Gauteng, South Africa</div></div>
+      </div>
+      <div class="contact-info-item">
+        <div class="ci-icon">🏅</div>
+        <div><div class="ci-label">B‑BBEE Status</div><div class="ci-val">Level 1 Contributor</div><div class="ci-sub">Verified certification available on request</div></div>
+      </div>
+    </div>
+    <div class="reveal-right">
+      <div class="contact-right">
+        <form id="quoteForm" action="https://formspree.io/f/xbdvglzl" method="POST">
+          <div class="form-2col">
+            <div class="form-r"><label>Full Name</label><input type="text" name="Full Name" required placeholder="Your name"></div>
+            <div class="form-r"><label>Phone Number</label><input type="tel" name="Phone Number" required placeholder="e.g. 082 000 0000"></div>
+          </div>
+          <div class="form-r"><label>Email Address</label><input type="email" name="email" placeholder="Optional"></div>
+          <div class="form-r">
+            <label>Service Required</label>
+            <select name="Service Required">
+              <option>Construction</option>
+              <option>IT Solutions</option>
+              <option>Real Estate</option>
+              <option>Transportation &amp; Sourcing</option>
+              <option>Multiple / Not Sure</option>
+            </select>
+          </div>
+          <div class="form-r"><label>Project Description</label><textarea name="Project Description" placeholder="Brief description of your project or requirements…" rows="4"></textarea></div>
+          <button type="submit" class="form-submit" id="formSubmit">Send Request →</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot-inner">
+    <div class="foot-brand">
+      <div class="foot-mark">W</div>
+      <div class="foot-name">WSM Investments Holdings (Pty) Ltd</div>
+    </div>
+    <div class="foot-bbee">B‑BBEE Level 1</div>
+    <div class="foot-copy">© <span id="yr"></span> WSM Investments Holdings. Northwold, Randburg.</div>
+  </div>
+</footer>
+
+<script>
+// ==================== PRELOADER ====================
+window.addEventListener('load',()=>{
+  setTimeout(()=>{
+    document.getElementById('preloader').classList.add('hidden');
+  },2000);
+});
+document.getElementById('yr').textContent=new Date().getFullYear();
+
+// ==================== NAV ====================
+const nav=document.getElementById('nav');
+window.addEventListener('scroll',()=>{
+  nav.classList.toggle('scrolled',window.scrollY>40);
+});
+const burger=document.getElementById('burgerBtn');
+const navLinks=document.getElementById('navLinks');
+burger.addEventListener('click',()=>navLinks.classList.toggle('open'));
+navLinks.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>navLinks.classList.remove('open')));
+
+// ==================== HERO CANVAS ====================
+const canvas=document.getElementById('heroCanvas');
+const ctx=canvas.getContext('2d');
+let W,H,particles=[];
+function resize(){W=canvas.width=canvas.offsetWidth;H=canvas.height=canvas.offsetHeight;}
+resize();window.addEventListener('resize',resize);
+
+const COLS=['rgba(212,98,26,','rgba(232,133,10,','rgba(26,60,90,','rgba(255,255,255,'];
+class Particle{
+  constructor(){this.reset();}
+  reset(){
+    this.x=Math.random()*W;this.y=Math.random()*H;
+    this.vx=(Math.random()-0.5)*0.4;this.vy=-Math.random()*0.6-0.1;
+    this.r=Math.random()*1.8+0.3;
+    this.col=COLS[Math.floor(Math.random()*COLS.length)];
+    this.a=Math.random()*0.6+0.1;this.maxA=this.a;
+    this.life=0;this.maxLife=120+Math.random()*240;
+  }
+  update(){
+    this.x+=this.vx;this.y+=this.vy;this.life++;
+    this.a=this.maxA*(1-this.life/this.maxLife);
+    if(this.life>this.maxLife||this.y<-10)this.reset();
+  }
+  draw(){
+    ctx.beginPath();ctx.arc(this.x,this.y,this.r,0,Math.PI*2);
+    ctx.fillStyle=this.col+this.a+')';ctx.fill();
+  }
+}
+for(let i=0;i<120;i++)particles.push(new Particle());
+
+// Grid lines
+function drawGrid(){
+  ctx.clearRect(0,0,W,H);
+  ctx.strokeStyle='rgba(255,255,255,0.03)';ctx.lineWidth=1;
+  const gs=90;
+  for(let x=0;x<W;x+=gs){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
+  for(let y=0;y<H;y+=gs){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
+}
+
+// Hexagons
+const hexes=[
+  {x:0.15,y:0.3,s:60,a:0.05,rot:0,sp:0.003},
+  {x:0.75,y:0.2,s:40,a:0.04,rot:1,sp:-0.002},
+  {x:0.88,y:0.7,s:80,a:0.06,rot:0.5,sp:0.0015},
+  {x:0.1,y:0.75,s:50,a:0.04,rot:2,sp:0.002},
+];
+function hexPath(cx,cy,s,rot){
+  ctx.beginPath();
+  for(let i=0;i<6;i++){
+    const a=rot+i*Math.PI/3;
+    i===0?ctx.moveTo(cx+s*Math.cos(a),cy+s*Math.sin(a)):ctx.lineTo(cx+s*Math.cos(a),cy+s*Math.sin(a));
+  }
+  ctx.closePath();
+}
+function drawHexes(){
+  hexes.forEach(h=>{
+    h.rot+=h.sp;
+    ctx.strokeStyle=`rgba(212,98,26,${h.a})`;ctx.lineWidth=1;
+    hexPath(h.x*W,h.y*H,h.s,h.rot);ctx.stroke();
+    ctx.strokeStyle=`rgba(212,98,26,${h.a*0.5})`;
+    hexPath(h.x*W,h.y*H,h.s*1.4,h.rot+0.3);ctx.stroke();
+  });
+}
+
+function tick(){
+  drawGrid();drawHexes();
+  particles.forEach(p=>{p.update();p.draw();});
+  requestAnimationFrame(tick);
+}
+tick();
+
+// ==================== SCROLL REVEAL ====================
+const revEls=document.querySelectorAll('.reveal,.reveal-left,.reveal-right');
+const ro=new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');ro.unobserve(e.target);}});
+},{threshold:0.15});
+revEls.forEach(el=>ro.observe(el));
+
+// ==================== AI VIDEO / MOCKUP SIMULATION ====================
+const frames=['frame0','frame1','frame2','frame3'];
+const sdots=[0,1,2,3].map(i=>document.getElementById('sdot'+i));
+const vsteps=document.querySelectorAll('.vstep');
+const progressFill=document.getElementById('progressFill');
+const cursor=document.getElementById('fakeCursor');
+let currentFrame=0,simRunning=false;
+
+function showFrame(n){
+  frames.forEach((f,i)=>{
+    const el=document.getElementById(f);
+    el.classList.toggle('hidden-frame',i!==n);
+  });
+  sdots.forEach((d,i)=>{
+    d.classList.remove('active','done');
+    if(i===n)d.classList.add('active');
+    else if(i<n)d.classList.add('done');
+  });
+  vsteps.forEach((s,i)=>{
+    s.classList.toggle('active-step',i===n);
+  });
+  const pct=[0,33,66,100];
+  progressFill.style.width=pct[n]+'%';
+}
+
+function moveCursor(lPct,tPct){
+  const body=document.getElementById('deviceBody');
+  const bw=body.offsetWidth,bh=body.offsetHeight;
+  cursor.style.left=(lPct/100*bw)+'px';
+  cursor.style.top=(tPct/100*bh)+'px';
+}
+
+async function wait(ms){return new Promise(r=>setTimeout(r,ms));}
+async function typeText(elId,text,speed=60){
+  const el=document.getElementById(elId);
+  el.classList.add('typing');el.textContent='';
+  for(const ch of text){el.textContent+=ch;await wait(speed);}
+  el.classList.remove('typing');
+}
+
+async function runSim(){
+  if(simRunning)return;simRunning=true;
+  while(true){
+    // Frame 0: browse website
+    currentFrame=0;showFrame(0);
+    moveCursor(50,80);await wait(1200);
+    moveCursor(25,68);await wait(800);
+    moveCursor(50,90);await wait(1000);
+
+    // Frame 1: pick service
+    currentFrame=1;showFrame(1);
+    await wait(600);
+    moveCursor(50,32);await wait(500);
+    // animate selection
+    const opts=document.querySelectorAll('.f2-opt');
+    opts.forEach(o=>{o.classList.remove('selected');o.querySelector('.check').textContent='';});
+    await wait(400);
+    opts[0].classList.add('selected');opts[0].querySelector('.check').textContent='✓';
+    await wait(1600);
+
+    // Frame 2: fill details
+    currentFrame=2;showFrame(2);
+    await wait(400);
+    moveCursor(30,30);await wait(300);
+    document.getElementById('typeName').textContent='';
+    await typeText('typeName','Sipho Nkosi',90);
+    await wait(300);moveCursor(75,30);await wait(300);
+    await typeText('typePhone','072 411 0022',90);
+    await wait(300);moveCursor(50,68);await wait(300);
+    await typeText('typeDesc','New commercial building project in JHB...',65);
+    await wait(600);moveCursor(50,88);await wait(700);
+
+    // Frame 3: confirmation
+    currentFrame=3;showFrame(3);
+    await wait(4000);
+  }
+}
+
+// Start sim when section in view
+const videoSect=document.getElementById('how-it-works');
+const simObserver=new IntersectionObserver(entries=>{
+  if(entries[0].isIntersecting&&!simRunning){runSim();}
+},{threshold:0.3});
+simObserver.observe(videoSect);
+
+// ==================== FORM ====================
+document.getElementById('quoteForm').addEventListener('submit',async function(e){
+  e.preventDefault();
+  const btn=document.getElementById('formSubmit');
+  btn.textContent='Sending…';btn.disabled=true;
+  btn.style.opacity='0.7';
+  try{
+    const res=await fetch(this.action,{
+      method:'POST',
+      body:new FormData(this),
+      headers:{Accept:'application/json'}
+    });
+    if(res.ok){
+      btn.textContent='✓ Request Sent — We\'ll Call You Back';
+      btn.style.background='#1a3a2a';btn.style.color='#5dffa0';btn.style.opacity='1';
+      this.reset();
+      setTimeout(()=>{btn.textContent='Send Request →';btn.style.background='';btn.style.color='';btn.disabled=false;},4000);
+    }else{
+      btn.textContent='Something went wrong — call 072 335 5470';
+      btn.style.background='#3a1a1a';btn.style.color='#ff8080';btn.style.opacity='1';
+      setTimeout(()=>{btn.textContent='Send Request →';btn.style.background='';btn.style.color='';btn.disabled=false;},4000);
+    }
+  }catch{
+    btn.textContent='Network error — call 072 335 5470';
+    btn.style.background='#3a1a1a';btn.style.color='#ff8080';btn.style.opacity='1';
+    setTimeout(()=>{btn.textContent='Send Request →';btn.style.background='';btn.style.color='';btn.disabled=false;},4000);
+  }
+});
+</script>
+</body>
+</html>
